@@ -5,7 +5,7 @@ const Campagne = require('../models/campagne');
 const commentShemas = mongoose.Schema({
   donateur: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: Donateur
+    ref: 'Donateur'
   },
   message: String,
   Date: {
@@ -14,7 +14,7 @@ const commentShemas = mongoose.Schema({
   },
   campagne: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: Campagne
+    ref: 'Campagne'
   }
 });
 

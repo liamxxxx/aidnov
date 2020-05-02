@@ -8,7 +8,7 @@ const donationShemas = mongoose.Schema({
   montant: Number,
   campagne: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: Campagne
+    ref: 'Campagne'
   }
 });
 

@@ -1,16 +1,35 @@
 const mongoose = require('mongoose');
 
 const userShemas = mongoose.Schema({
-  nom: String,
-  prenoms: String,
-  email: String,
-  password: String,
+  nom: {
+    type: String,
+    trim: true,
+    required: true
+  },
+  prenoms: {
+    type: String,
+    trim: true,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
   confirmPassword: String,
   verified: {
     type: Boolean,
     default: false
   },
-  isActive: Boolean,
+  isActive: {
+    type: Boolean,
+    default: false
+  },
   numero: String,
   mobileMoney: String
 });

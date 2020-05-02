@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 const User = require('../models/users');
 const Donation = require('../models/donate');
 
-const campagneShemas = mongoose.Schema({
-  users: {
+const campagneShemas = new mongoose.Schema({
+  user: {
     type: mongoose.Schema.ObjectId,
-    ref: User
+    ref: 'User'
   },
   nomCampagne: String,
-  cause: {
+  typeCampagne: {
     type: String,
     enum: ['Santé', 'Autres'],
   },
@@ -18,10 +18,10 @@ const campagneShemas = mongoose.Schema({
   donateur: [
     {
       type: mongoose.Schema.ObjectId,
-      ref: Donation
+      ref: 'Donation'
     }
   ],
-  isVerified: {
+  isVerified:{
     type: Boolean,
     default: false
   },
@@ -31,6 +31,14 @@ const campagneShemas = mongoose.Schema({
     default: false
   }
 });
+
+campagneShemas.pre(/^find/, function(next) {
+  this.populate({
+    path: 'user',
+    select: 'nom prenoms'
+  });
+  next();
+}); 
 
 const Campagne = mongoose.model('Campagne', campagneShemas);
 
