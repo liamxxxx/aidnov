@@ -7,6 +7,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
+const globalErrorHandler = require('./controllers/errorController');
 
 
 const app = express();
@@ -48,15 +49,17 @@ app.use(xss());
 
 // ROUTES REQUIRES
 const campagne = require('./routes/campagne');
-const comment = require('./routes/comment');
-const donate = require('./routes/donation');
-const users = require('./routes/users');
+const comment = require('./routes/commentaire');
+const donateur = require('./routes/donateur');
+const users = require('./routes/utlisateur');
 
 // ROUTES 
 app.use('/api/v1/campagnes', campagne);
 app.use('/api/v1/comments', comment);
-app.use('/api/v1/donates', donate);
-app.use('/api/v1/users', users)
+app.use('/api/v1/donateur', donateur);
+app.use('/api/v1/users', users);
+
+app.use(globalErrorHandler);
 
 module.exports = app;
 

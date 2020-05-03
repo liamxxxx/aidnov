@@ -1,13 +1,27 @@
-const Comment = require('../models/comment');
+const Comment = require('../models/commentaire');
+const asyncHandler = require('../utils/asyncHandler');
+const ErrorHandler = require('../utils/errorHandler');
 
 /**
   @Description  Create comment
   @Route        /api/v1/camapgne (POST)
   @Access       private
 */
-exports.createComment = async (req, res) => {
-
-}
+// TODO Creer un commentaire
+exports.createComment = asyncHandler(async (req, res) => {
+    const { donateur, message, date, campagne } = req.body;
+    const commentaire = new Comment({
+    donateur,
+    message,
+    date,
+    campagne
+  });
+  await commentaire.save(); 
+  res.status(201).json({
+    status: 'success',
+    message: 'Operation effectué'
+  });
+});
 
 /* -------------------------------------------------------------------------- */
 /**
@@ -15,10 +29,16 @@ exports.createComment = async (req, res) => {
   @Route        /api/v1/comment (GET)
   @Access       public
 */
-exports.getAllComments = async (req, res) => {
-
-}
-
+// TODO Recuperé la liste de tous les commentaires
+exports.getAllComments = asyncHandler(async (req, res) => {
+  const getComments = await Comment.find();
+  res.status(201).json({
+    status: 'success',
+    data: {
+      Commentaires: getComments
+    }
+  });
+});
 
 /* -------------------------------------------------------------------------- */
 /**
@@ -26,9 +46,17 @@ exports.getAllComments = async (req, res) => {
   @Route        /api/v1/comment/:id (GET)
   @Access       public
 */
-exports.getComment = async (req, res) => {
-
-}
+// TODO Récupérer un commentaire specifique
+exports.getComment = asyncHandler(async (req, res) => {
+  const getComment = await Comment.findById(req.params.id);
+  if (!getComment) return next(new ErrorHandler('Commentaire introuvable !', 401));
+  res.status(201).json({
+    status: 'success',
+    data: {
+      Commentaire: getComment
+    }
+  });
+});
 
 /* -------------------------------------------------------------------------- */
 /** 
@@ -36,9 +64,15 @@ exports.getComment = async (req, res) => {
   @Route  /api/v1/comment/:id  (PUT/PATCH)
   @Access private
 */
-exports.updateComment = async (req, res) => {
-
-}
+// TODO Mettre a jour un commentaire specifique
+exports.updateComment = asyncHandler(async (req, res) => {
+    const result = await Comment.findByIdAndUpdate(req.params.id, req.body);
+    if (!result) return next(new ErrorHandler('Commentaire introuvable !'));
+    res.status(201).json({
+      status: 'success',
+      message: 'Mise a jour effectué !',
+    });
+});
 
 /* -------------------------------------------------------------------------- */
 /**
@@ -46,6 +80,14 @@ exports.updateComment = async (req, res) => {
   @route   /api/v1/comment/:id (DELETE)
   @Access  private
 */
-exports.deleteComment = async (req, res) => {
-
-}
+// TODO Effacer un commentaire
+exports.deleteComment = asyncHandler(async (req, res) => {
+  const delComment = await Comment.findByIdAndDelete(req.params.id);
+  if (!delComment) return next(new ErrorHandler('Commentaire introuvable !'));
+  res.status(200).json({
+    status: 'success',
+    data: {
+      deletedComment: delComment
+    }
+  });
+});

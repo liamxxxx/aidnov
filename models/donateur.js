@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Campagne = require('../models/campagne');
 
 const donationShemas = mongoose.Schema({
   nom: String,
@@ -12,6 +11,13 @@ const donationShemas = mongoose.Schema({
   }
 });
 
+donationShemas.pre(/^find/, function(next) {
+  this.populate({
+    path: 'campagne',
+    select: 'nomCampagne typeCampagne montantDemande'
+  });
+  next();
+});
 
 const Donation = mongoose.model('Donation', donationShemas);
 

@@ -1,11 +1,13 @@
 const Campagne = require('../models/campagne');
+const asyncHandler = require('../utils/asyncHandler');
+const ErrorHandler = require('../utils/errorHandler');
 
 /**
   @Description  Create campagne
   @Route        /api/v1/camapgne (POST)
   @Access       private
 */
-exports.createCampagne = async (req, res) => {
+exports.createCampagne = asyncHandler(async (req, res, next) => {
   const {
     nomCampagne, 
     typeCampagne, 
@@ -31,7 +33,7 @@ exports.createCampagne = async (req, res) => {
         campagne: campagne
       }
     });
-}
+});
 
 /* -------------------------------------------------------------------------- */
 /**
@@ -39,25 +41,15 @@ exports.createCampagne = async (req, res) => {
   @Route        /api/v1/campagne (GET)
   @Access       public
 */
-exports.getAllCampagne = async (req, res) => {
-  try { 
+exports.getAllCampagne = asyncHandler(async (req, res) => { 
     const result = await Campagne.find();
     res.status(200).json({
       status: 'success',
       data: {
         campagnes: result
       }
-    });
-
-  } catch(err) {
-    res.status(400).json({
-      status: 'fail',
-      message: 'An error occured'
-    })
-  }
-  
-}
-
+    });  
+});
 
 /* -------------------------------------------------------------------------- */
 /**
@@ -65,14 +57,16 @@ exports.getAllCampagne = async (req, res) => {
   @Route        /api/v1/campagne/:id (GET)
   @Access       public
 */
-exports.getCampagne = async (req, res) => {
+exports.getCampagne = asyncHandler (async (req, res) => {
+  const readOneCampagne = await Campagne.findById(req.params.id);
+  if (!readOneCampagne) next(new ErrorHandler('Campagne not found', 401));
   res.status(200).json({
     status: 'success',
     data: {
-      campagne: campagne
+      campagne: readOneCampagne
     }
   });
-}
+});
 
 /* -------------------------------------------------------------------------- */
 /** 
@@ -80,12 +74,17 @@ exports.getCampagne = async (req, res) => {
   @Route  /api/v1/campagne/:id  (PUT/PATCH)
   @Access private
 */
-exports.updateCampagne = async (req, res) => {
+exports.updateCampagne = asyncHandler (async (req, res) => {
+  const putCampagne = await Campagne.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true
+  });
+  if (!putCampagne) return next(new ErrorHandler('Campagne introuvable !', 401))
   res.status(200).json({
     status: 'success',
-    message: 'update done !'
+    message: 'Mise à jour reussi'
   });
-}
+})
 
 /* -------------------------------------------------------------------------- */
 /**
@@ -93,11 +92,31 @@ exports.updateCampagne = async (req, res) => {
   @route   /api/v1/campagne/:id (DELETE)
   @Access  private
 */
-exports.deleteCampagne = async (req, res) => {
+exports.deleteCampagneAdmin = asyncHandler (async (req, res) => {
+  const deleteByAdmin = Campagne.findByIdAndDelete(req.params.id);
+  if (!deleteByAdmin) return next(new ErrorHandler('Campagne introuvable !'))
   res.status(200).json({
     status: 'success',
     data: {
-      campagne: campagne
+      campagne: deleteByAdmin
     }
   });
-}
+})
+
+/* -------------------------------------------------------------------------- */
+/**
+  @Description    Desactived Campagne
+  @route   /api/v1/campagne/:id (DELETE)
+  @Access  private
+*/
+exports.deleteCampagne = asyncHandler(async (req, res) => {
+    const deleteResult = await Campagne.findByIdAndUpdate(req.params.id, {isActived: false}) ;
+    if (!deleteByAdmin) return next(new ErrorHandler('Campagne introuvable !'))
+    res.status(200).json({
+      status: 'success',
+      data: {
+        campagne: deleteResult
+      }
+    });
+});
+

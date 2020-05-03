@@ -1,20 +1,34 @@
 const mongoose = require('mongoose');
-const User = require('../models/users');
-const Donation = require('../models/donate');
+const User = require('./utilisateur');
+const Donation = require('./donateur');
 
 const campagneShemas = new mongoose.Schema({
   user: {
     type: mongoose.Schema.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: true
   },
-  nomCampagne: String,
+  nomCampagne: {
+    type: String,
+    required: true
+  },
   typeCampagne: {
     type: String,
-    enum: ['Santé', 'Autres'],
+    required: true,
+    enum: ['Santé', 'Social'],
   },
-  montantDemande: Number,
-  raison: String,
-  photo: String,
+  montantDemande: {
+    type: Number,
+    required: true
+  },
+  raison: {
+    type: String,
+    required: true
+  },
+  photo: {
+    type: String,
+    required: true
+  },
   donateur: [
     {
       type: mongoose.Schema.ObjectId,
@@ -23,15 +37,26 @@ const campagneShemas = new mongoose.Schema({
   ],
   isVerified:{
     type: Boolean,
-    default: false
+    default: false,
+    select: false
   },
   montantObtenue: Number,
   isCompleted: {
     type: Boolean,
     default: false
+  },
+  isActived: {
+    type: Boolean,
+    default: false,
+    select: false
+  },
+  createAt: {
+    type: Date,
+    default: Date.now()
   }
 });
 
+// Afficher les informations sur le user
 campagneShemas.pre(/^find/, function(next) {
   this.populate({
     path: 'user',
@@ -39,6 +64,12 @@ campagneShemas.pre(/^find/, function(next) {
   });
   next();
 }); 
+
+// On affiche seulement les campagnes actifs
+campagneShemas.pre(/^find/, function(next) {
+  this.find({ isActived: { $ne: false }})
+  next();
+});
 
 const Campagne = mongoose.model('Campagne', campagneShemas);
 
