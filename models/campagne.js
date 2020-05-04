@@ -29,21 +29,10 @@ const campagneShemas = new mongoose.Schema({
     type: String,
     required: true
   },
-  donateur: [
-    {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Donation'
-    }
-  ],
   isVerified:{
     type: Boolean,
     default: false,
     select: false
-  },
-  montantObtenue: Number,
-  isCompleted: {
-    type: Boolean,
-    default: false
   },
   isActived: {
     type: Boolean,

@@ -14,4 +14,11 @@ router
   .put(donateurController.updateDonateur)
   .delete(donateurController.deleteDonateur)
 
+router
+  .route('/lastdonate/:id')
+  .get(donateurController.getLastFiveDonate)
+
+router
+  .route('/donatebycampagne/:id')
+  .get(donateurController.getCampagneByDonate)
 module.exports = router;

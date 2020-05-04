@@ -8,16 +8,20 @@ const donationShemas = mongoose.Schema({
   campagne: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Campagne'
+  },
+  createAt: {
+    type: Date,
+    default: Date.now()
   }
 });
 
-donationShemas.pre(/^find/, function(next) {
-  this.populate({
-    path: 'campagne',
-    select: 'nomCampagne typeCampagne montantDemande'
-  });
-  next();
-});
+// donationShemas.pre(/^find/, function(next) {
+//   this.populate({
+//     path: 'campagne',
+//     select: 'nomCampagne typeCampagne montantDemande'
+//   });
+//   next();
+// });
 
 const Donation = mongoose.model('Donation', donationShemas);
 
