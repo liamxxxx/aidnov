@@ -1,18 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const donateurController = require('../controllers/donateurController');
+const authController = require('../controllers/authController');
 
 router
   .route('/')
   .get(donateurController.getAllDonateur)
   .post(donateurController.createDonateur)
 
-
+router.use(authController.protect)  
 router
   .route('/:id')
   .get(donateurController.getDonateur)
-  .put(donateurController.updateDonateur)
-  .delete(donateurController.deleteDonateur)
+  .put(authController.restrictTo('Admin'), donateurController.updateDonateur)
+  .delete(authController.restrictTo('Admin'), donateurController.deleteDonateur)
 
 router
   .route('/lastdonate/:id')
