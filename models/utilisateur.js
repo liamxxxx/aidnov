@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-// const hashPassword = require('../utils/hashPassword');
+const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
@@ -7,41 +7,57 @@ const userShemas = mongoose.Schema({
   nom: {
     type: String,
     trim: true,
-    required: true
+    required: [true, 'Nom est obligatoire']
   },
   prenoms: {
     type: String,
     trim: true,
-    required: true
+    required: [true, 'Prenoms est obligatoire']
   },
   email: {
     type: String,
-    required: true,
+    required: [true, 'Email est obligatoire'],
+    validate: [validator.isEmail, 'Entrez un email valide'],
     trim: true,
+    // lowercase: true,
     unique: true
   },
   password: {
     type: String,
-    required: true
+    required: [true, 'Mot de passe est obligatoire']
   },
-  passwordConfirm: String,
+  passwordConfirm: {
+    type: String,
+    required: [true, 'Confirmation du mot de passe est obligatoire'],
+    validate: {
+      validator: function(el) {
+        return el === this.password
+      }, message : 'Mots de passe non identiques'
+      }
+  },
   isVerified: {
     type: Boolean,
     default: false
   },
   isActive: {
     type: Boolean,
-    default: false
+    default: true
   },
   passwordResetToken: String,
   passwordResetExpires: Date,
   emailConfirmToken: String,
   emailConfirmExpires: Date,
-  numero: String,
-  mobileMoney: String
+  passwordChangedAt: Date,
+  role: {
+    type: String,
+    default: 'User',
+    // required: [true, 'Role est obligatoire'],
+    enum: ['User', 'Admin']
+  }
 });
 
 userShemas.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   this.passwordConfirm = undefined;
@@ -77,12 +93,20 @@ userShemas.methods.createEmailConfirmToken = function() {
   return emailToken;
 };
 
-userShemas.methods.correctPassword = async function(
-  candidatePassword,
-  userPassword
-) {
-  return await bcrypt.compare(candidatePassword, userPassword);
+userShemas.methods.changedPasswordAfter = function(JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+
+    return JWTTimestamp < changedTimestamp;
+  }
+
+  // False means NOT changed
+  return false;
 };
+
 
 const User = mongoose.model('User', userShemas);
 

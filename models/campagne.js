@@ -1,33 +1,30 @@
 const mongoose = require('mongoose');
-const User = require('./utilisateur');
-const Donation = require('./donateur');
 
 const campagneShemas = new mongoose.Schema({
   user: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
-    required: true
+    required: [true, 'Utilisateur est obligatoire']
   },
   nomCampagne: {
     type: String,
-    required: true
+    required: [true, 'Campagne est obligatoire']
   },
   typeCampagne: {
     type: String,
-    required: true,
+    required: [true, 'Type de campagne est obligatoire'],
     enum: ['Santé', 'Social'],
   },
   montantDemande: {
     type: Number,
-    required: true
+    required: [true, 'Montant demandé est obligatoire']
   },
   raison: {
     type: String,
-    required: true
+    required: [true, 'Raison est obligatoire']
   },
   photo: {
     type: String,
-    required: true
   },
   isVerified:{
     type: Boolean,
@@ -36,8 +33,7 @@ const campagneShemas = new mongoose.Schema({
   },
   isActived: {
     type: Boolean,
-    default: false,
-    select: false
+    default: true,
   },
   createAt: {
     type: Date,
@@ -55,10 +51,10 @@ campagneShemas.pre(/^find/, function(next) {
 }); 
 
 // On affiche seulement les campagnes actifs
-campagneShemas.pre(/^find/, function(next) {
-  this.find({ isActived: { $ne: false }})
-  next();
-});
+// campagneShemas.pre(/^find/, function(next) {
+//   this.find({ isActived: { $ne: false }})
+//   next();
+// });
 
 const Campagne = mongoose.model('Campagne', campagneShemas);
 

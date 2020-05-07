@@ -96,6 +96,7 @@ exports.getCampagneByDonate = asyncHandler(async(req, res, next) => {
       $group: {
         _id: null,
         sommeTotal: { $sum: '$montant' },
+        moyenneDonation: { $avg: '$montant' },
         nombreDonateur: {$sum: 1}
       }
     }
@@ -127,4 +128,26 @@ exports.getLastFiveDonate = asyncHandler(async(req, res, next) => {
       FiveLastDonate: lastFiveDonate,
     }
   })
+});
+
+exports.statsDonation = asyncHandler(async(req, res, next) => {
+  const totalSolde = await Donateur.aggregate([
+    // First stage
+    {
+      $group: {
+        _id: null,
+        sommeTotal: { $sum: '$montant' },
+      }
+     }
+    // {
+    //   $count: "nombreTotalDonateur"
+    // }
+  ]);
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      Stats: totalSolde,
+    }
+  });
 });

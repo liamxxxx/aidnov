@@ -21,4 +21,9 @@ router
 router
   .route('/donatebycampagne/:id')
   .get(donateurController.getCampagneByDonate)
+
+// router
+//   .route('/statsdonation')
+//   .get(donateurController.statsDonation)
+
 module.exports = router;

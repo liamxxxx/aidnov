@@ -7,7 +7,10 @@ const commentShemas = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Donation'
   },
-  message: String,
+  message: {
+    type: String,
+    required: [true, 'Message obligatoire']
+  },
   Date: {
     type: Date,
     default: Date.now(),

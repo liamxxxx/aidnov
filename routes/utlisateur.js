@@ -4,15 +4,8 @@ const userController = require('../controllers/usersController');
 const authController = require('../controllers/authController');
 
 router
-  .route('/')
-  .get(userController.getAllUsers)
-  .post(userController.createUser)
-
-router
   .route('/:id')
   .get(userController.getUser)
-  .delete(userController.deleteUser)
-  .put(userController.updateUser)
 
 router
   .route('/signup')
@@ -33,5 +26,31 @@ router
 router
   .route('/emailconfirmation/:token')
   .patch(authController.verifiedEmail)
+
+router.use(authController.protect)
+
+router
+  .route('/:id  ')
+  .delete(authController.restrictTo('Admin'), userController.deleteUser)
+
+router
+  .route('/updateMe')
+  .patch(authController.restrictTo('User'), userController.updateMe)
+
+router
+  .route('/')
+  .get(authController.restrictTo('Admin'), userController.getAllUsers)
+    
+router
+  .route('/deleteMe')
+  .delete(authController.restrictTo('User'), userController.deleteMe);
+
+router
+  .route('/deleteUser')
+  .delete(authController.restrictTo('Admin'), userController.deleteUser);
+
+router
+  .route('/updatepassword')
+  .patch(authController.updatePassword)
   
 module.exports = router;

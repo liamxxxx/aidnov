@@ -1,11 +1,11 @@
 const User = require('../models/utilisateur');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
 const asyncHandler = require('../utils/asyncHandler');
+const bcrypt = require('bcryptjs');
 const ErrorHandler = require('../utils/errorHandler');
-const hashPassword = require('../utils/hashPassword');
-const sendEmail = require('../utils/email');
+const Email = require('../utils/email');
 const crypto = require('crypto');
+const { promisify } = require('util');
 
 // Sign token function
 const signToken = id => {
@@ -15,7 +15,6 @@ const signToken = id => {
 };
 
 // Create and send token by cookies
-// TODO TEST SEND TOKEN
 const createSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
   const cookieOptions = {
@@ -28,9 +27,6 @@ const createSendToken = (user, statusCode, res) => {
 
   res.cookie('jwt', token, cookieOptions);
 
-  // Remove password from output
-  user.password = undefined;
-
   res.status(statusCode).json({
     status: 'success',
     token,
@@ -41,41 +37,29 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 // Signup
-//TODO SIGNUP TEST OK
 exports.signup = asyncHandler(async (req, res, next) => {
-  // Get user data
-  const {nom, prenoms, email, password, passwordConfirm} = req.body;
-  const newUser = await User.create({
-    nom,
-    prenoms,
-    email,
-    password,
-    passwordConfirm
-  });
-  
-  // 2) Generate the random reset token
-  const emailToken = newUser.createEmailConfirmToken();
-  console.log(emailToken);
-  await newUser.save({ validateBeforeSave: false });
+  // Recuperation des donnees envoyer par l'utilisateur
+  const {nom, prenoms, email, password, passwordConfirm, role} = req.body;
 
-  // 3) Send it to user's email
+   // Creation de l'utilisateur
+   const newUser = new User({
+    nom, prenoms, email, password, passwordConfirm, role
+  });
+
+  // 2) Generation du token de confirmation du mail
+  const emailToken = newUser.createEmailConfirmToken();
+
+  // 3) Enregistrement des données 
+  await newUser.save();
+
+  // 4) Lien de confirmation de l'adresse Email
   const resetURL = `${req.protocol}://${req.get(
     'host'
   )}/api/v1/users/emailconfirmation/${emailToken}`;
 
-  const message = `Merci pour votre enregistrement sur la plaforme d'entrainde Ainov, pour confirmer votre compte veuillez cliquer ce lien to: ${resetURL}`;
-
   try {
-    await sendEmail({
-      email: email,
-      subject: 'Email confirmation token (valid for 10 min)',
-      message
-    });
-
-    res.status(200).json({
-      status: 'success',
-      message: 'Token sent to email!'
-    });
+    await new Email(newUser, resetURL).sendWelcome();
+    createSendToken(newUser, 201, res);
   } catch (err) {
     newUser.emailConfirmToken = undefined;
     newUser.emailConfirmExpires = undefined;
@@ -86,12 +70,9 @@ exports.signup = asyncHandler(async (req, res, next) => {
       500
     );
   }
-
-   createSendToken(newUser, 201, res);
 });
 
 // Login
-// TODO LOGIN TEST OK
 exports.login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -99,11 +80,19 @@ exports.login = asyncHandler(async (req, res, next) => {
   if (!email || !password) {
     return next(new ErrorHandler('Please provide email and password!', 400));
   }
+  console.log('Email adresse', email);
   // 2) Check if user exists && password is correct
-  const user = await User.findOne({ email }).select('+password');
+  const user = await User.findOne({'email': email});
 
-  if (!user || !(await user.correctPassword(password, user.password))) {
+  console.log('User: ',user)
+  // Compare password
+  const isVerifiedPassword = await bcrypt.compare(password, user.password);
+ 
+  if (!user || !isVerifiedPassword ) {
     return next(new ErrorHandler('Incorrect email or password', 401));
+  }
+  else if (user.isVerified === false ) {
+    return next(new ErrorHandler('Account not verified, Please check your email box !', 401))
   }
 
   // 3) If everything ok, send token to client
@@ -111,7 +100,6 @@ exports.login = asyncHandler(async (req, res, next) => {
 });
 
 // Protection 
-// TODO PROTECTION MIDDLEWARE
 exports.protect = asyncHandler(async (req, res, next) => {
   // 1) Getting token and check of it's there
   let token;
@@ -157,7 +145,6 @@ exports.protect = asyncHandler(async (req, res, next) => {
 });
 
 // Reset password 
-// TODO RESET PASSWORD OK
 exports.resetPassword = asyncHandler(async (req, res, next) => {
   // 1) Get user based on the token
   const hashedToken = crypto
@@ -186,13 +173,14 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 });
 
 // Update password
-// TODO UPDATE PASSWORD
 exports.updatePassword = asyncHandler(async (req, res, next) => {
   // 1) Get user from collection
   const user = await User.findById(req.user.id).select('+password');
 
   // 2) Check if posted current password is correct
-  if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
+  const correctPassword = await bcrypt.compare(req.body.passwordCurrent, user.password);
+
+  if (!correctPassword) {
     return next(new ErrorHandler('Your current password is wrong.', 401));
   }
 
@@ -206,7 +194,6 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
-// TODO FORGOT PASSWORD OK
 exports.forgotPassword = asyncHandler(async (req, res, next) => {
   // 1) Get user based on POSTed email
   const user = await User.findOne({ email: req.body.email });
@@ -226,12 +213,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
 
   try {
-    await sendEmail({
-      email: user.email,
-      subject: 'Your password reset token (valid for 10 min)',
-      message
-    });
-
+   await new Email(user, resetURL).resetPassword();
     res.status(200).json({
       status: 'success',
       message: 'Token sent to email!'
@@ -249,7 +231,6 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 })
 
 
-//TODO LOGOUT
 exports.logout = asyncHandler(async (req, res, next) => {
   res.cookie('jwt', 'loggedout', {
     expiresIn: new Date(Date.now() + 10 * 1000),
@@ -260,7 +241,6 @@ exports.logout = asyncHandler(async (req, res, next) => {
   });
 });
 
-// TODO Email verification OK
 exports.verifiedEmail = asyncHandler(async(req, res, next) => {
   // 1) Get user based on the token
   const hashedToken = crypto
@@ -280,9 +260,20 @@ exports.verifiedEmail = asyncHandler(async(req, res, next) => {
   user.isVerified = true;
   user.emailConfirmToken = undefined;
   user.emailConfirmExpires = undefined;
-  await user.save();
+  await user.save({validateBeforeSave: false});
 
   // 3) Update changedPasswordAt property for the user
   // 4) Log the user in, send JWT
   createSendToken(user, 200, res);
 });
+
+exports.restrictTo = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new ErrorHandler('You do not have permission to perform this action', 403)
+      );
+      }
+    next();
+  };
+};

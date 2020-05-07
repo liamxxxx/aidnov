@@ -1,10 +1,21 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const donationShemas = mongoose.Schema({
-  nom: String,
+  nom: {
+    type: String,
+    default: 'Anonyme'
+  },
   prenoms: String,
-  email: String,
-  montant: Number,
+  email: {
+    type: String,
+    validate: [validator.isEmail, 'Email valide obligatoire'],
+    required: [true, 'Email obligatoire']
+  },
+  montant: {
+    type: Number,
+    required: [true, 'Montant obligatoire']
+  },
   campagne: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Campagne'

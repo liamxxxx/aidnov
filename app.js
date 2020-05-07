@@ -52,14 +52,16 @@ const campagne = require('./routes/campagne');
 const comment = require('./routes/commentaire');
 const donateur = require('./routes/donateur');
 const users = require('./routes/utlisateur');
+const views = require('./routes/view');
 
 // ROUTES 
+app.use('/', views);
 app.use('/api/v1/campagnes', campagne);
 app.use('/api/v1/comments', comment);
-app.use('/api/v1/donateur', donateur);
+app.use('/api/v1/donation', donateur);
 app.use('/api/v1/users', users);
 
 app.use(globalErrorHandler);
-
+ 
 module.exports = app;
 

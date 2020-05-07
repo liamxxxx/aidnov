@@ -1,6 +1,29 @@
 const Campagne = require('../models/campagne');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorHandler = require('../utils/errorHandler');
+const multer = require('multer');
+
+const filterObj = (obj, ...allowedFields) => {
+  const newObj = {};
+  Object.keys(obj).forEach(el => {
+    if (allowedFields.includes(el)) newObj[el] = obj[el];
+  });
+  return newObj;
+};
+
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/img/campagnes')
+  },
+  filename: (req, file, cb) => {
+    const ext = file.mimetype.split('/')[1];
+    cb(null, `user-${req.user.id}-${Date.now()}.${ext}`)
+  }
+});
+
+const upload = multer({storage: multerStorage});
+
+exports.uploadCampagnePhoto = upload.single('photo');
 
 /**
   @Description  Create campagne
@@ -42,13 +65,15 @@ exports.createCampagne = asyncHandler(async (req, res, next) => {
   @Access       public
 */
 exports.getAllCampagne = asyncHandler(async (req, res) => { 
-    const result = await Campagne.find();
-    res.status(200).json({
-      status: 'success',
-      data: {
-        campagnes: result
-      }
-    });  
+    await Campagne.find()
+    .then(result => {
+      res.status(200).json({
+        status: 'success',
+        data: {
+          campagnes: result
+        }
+      });
+    });
 });
 
 /* -------------------------------------------------------------------------- */
@@ -57,9 +82,9 @@ exports.getAllCampagne = asyncHandler(async (req, res) => {
   @Route        /api/v1/campagne/:id (GET)
   @Access       public
 */
-exports.getCampagne = asyncHandler (async (req, res) => {
+exports.getCampagne = asyncHandler (async (req, res, next) => {
   const readOneCampagne = await Campagne.findById(req.params.id);
-  if (!readOneCampagne) next(new ErrorHandler('Campagne not found', 401));
+  if (!readOneCampagne) return next(new ErrorHandler('Campagne not found', 401));
   res.status(200).json({
     status: 'success',
     data: {
@@ -98,10 +123,27 @@ exports.deleteCampagneAdmin = asyncHandler (async (req, res) => {
   res.status(200).json({
     status: 'success',
     data: {
-      campagne: deleteByAdmin
+      campagne: null
     }
   });
-})
+});
+
+
+exports.deactivatedCampagne = asyncHandler(async(req, res) => {
+  await Campagne.findByIdAndUpdate(req.params.id, {isActived: false});
+  res.status(200).json({
+    status: 'success',
+    message: 'Campagne desactivé !'
+  });
+});
+
+exports.verifiedCampagne = asyncHandler(async(req, res) => {
+  await Campagne.findByIdAndUpdate(req.params.id, {isVerified: true});
+  res.status(200).json({
+    status: 'success',
+    message: 'Campagne verifié !'
+  });
+});
 
 /* -------------------------------------------------------------------------- */
 /**

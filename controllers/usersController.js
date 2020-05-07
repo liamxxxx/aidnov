@@ -1,30 +1,12 @@
 const User = require('../models/utilisateur');
-
-/**
-  @Description  Create User
-  @Route        /api/v1/User (POST)
-  @Access       private
-*/
-exports.createUser = async (req, res) => {
-  const { nom, prenoms, email, password, passwordConfirm, numero } = req.body;
-  const resultUsersCreate = new User({
-    nom,
-    prenoms,
-    email,
-    password,
-    passwordConfirm,
-    numero
+const asyncHandler = require('../utils/asyncHandler');
+const filterObj = (obj, ...allowedFields) => {
+  const newObj = {};
+  Object.keys(obj).forEach(el => {
+    if (allowedFields.includes(el)) newObj[el] = obj[el];
   });
-
-  await resultUsersCreate.save();
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      users: resultUsersCreate
-    }
-  });
-}
+  return newObj;
+};
 
 /* -------------------------------------------------------------------------- */
 /**
@@ -65,9 +47,30 @@ exports.getUser = async (req, res) => {
   @Route  /api/v1/User/:id  (PUT/PATCH)
   @Access private
 */
-exports.updateUser = async (req, res) => {
+exports.updateMe = asyncHandler (async (req, res) => {
+  if (req.body.password || req.body.passwordConfirm) {
+    return next(
+      new AppError(
+        'This route is not for password updates. Please use /updateMyPassword.',
+        400
+      )
+    );
+  }
+  const filteredBody = filterObj(req.body, 'nom', 'prenoms', 'email');
 
-}
+  const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
+    new: true,
+    runValidators: true
+  });
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: updatedUser
+    }
+  });
+
+})
 
 /* -------------------------------------------------------------------------- */
 /**
@@ -75,6 +78,20 @@ exports.updateUser = async (req, res) => {
   @route   /api/v1/User/:id (DELETE)
   @Access  private
 */
-exports.deleteUser = async (req, res) => {
+exports.deleteMe = asyncHandler(async (req, res) => {
+  await User.findByIdAndUpdate(req.user.id, { isActive: false });
 
-}
+  res.status(204).json({
+    status: 'success',
+    data: null
+  });
+});
+
+exports.deleteUser = asyncHandler(async (req, res) => {
+  await User.findByIdAndDelete(req.params.id);
+
+  res.status(204).json({
+    status: 'success',
+    data: null
+  });
+});
