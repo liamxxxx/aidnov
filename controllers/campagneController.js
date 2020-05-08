@@ -36,16 +36,17 @@ exports.createCampagne = asyncHandler(async (req, res, next) => {
     typeCampagne, 
     montantDemande, 
     raison, 
-    photo,
     } = req.body;
+
+  req.body.photo = req.file.filename;
 
   const campagne = new Campagne({
     user: req.body.user, 
     nomCampagne, 
     typeCampagne, 
     montantDemande, 
-    raison, 
-    photo
+    raison,
+    photo: req.body.photo
   });
 
   await campagne.save();
