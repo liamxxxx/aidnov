@@ -1,6 +1,7 @@
 const Campagne = require('../models/campagne');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorHandler = require('../utils/errorHandler');
+const APIFeatures = require('../utils/apiFeatures');
 const multer = require('multer');
 
 const filterObj = (obj, ...allowedFields) => {
@@ -30,6 +31,7 @@ exports.uploadCampagnePhoto = upload.single('photo');
   @Route        /api/v1/camapgne (POST)
   @Access       private
 */
+
 exports.createCampagne = asyncHandler(async (req, res, next) => {
   const {
     nomCampagne, 
@@ -65,6 +67,7 @@ exports.createCampagne = asyncHandler(async (req, res, next) => {
   @Route        /api/v1/campagne (GET)
   @Access       public
 */
+
 exports.getAllCampagne = asyncHandler(async (req, res) => { 
     await Campagne.find()
     .then(result => {
@@ -83,6 +86,7 @@ exports.getAllCampagne = asyncHandler(async (req, res) => {
   @Route        /api/v1/campagne/:id (GET)
   @Access       public
 */
+
 exports.getCampagne = asyncHandler (async (req, res, next) => {
   const readOneCampagne = await Campagne.findById(req.params.id);
   if (!readOneCampagne) return next(new ErrorHandler('Campagne not found', 401));
@@ -100,6 +104,7 @@ exports.getCampagne = asyncHandler (async (req, res, next) => {
   @Route  /api/v1/campagne/:id  (PUT/PATCH)
   @Access private
 */
+
 exports.updateCampagne = asyncHandler (async (req, res) => {
   const putCampagne = await Campagne.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
@@ -118,6 +123,7 @@ exports.updateCampagne = asyncHandler (async (req, res) => {
   @route   /api/v1/campagne/:id (DELETE)
   @Access  private
 */
+
 exports.deleteCampagneAdmin = asyncHandler (async (req, res) => {
   const deleteByAdmin = Campagne.findByIdAndDelete(req.params.id);
   if (!deleteByAdmin) return next(new ErrorHandler('Campagne introuvable !'))
@@ -161,5 +167,9 @@ exports.deleteCampagne = asyncHandler(async (req, res) => {
         campagne: deleteResult
       }
     });
+});
+
+exports.getCampagneByCause = asyncHandler(async(req, res) => {
+
 });
 

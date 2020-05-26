@@ -1,0 +1,25 @@
+section.fullwidth-section
+  .section-outer.clearfix
+    .image-column(style='background-image:url(images/resource/image-2.jpg);')
+      .hidden-image
+        img(src='images/resource/image-2.jpg' alt)
+    .content-column(style='background-image:url(images/resource/image-1.jpg);')
+      .content
+        .title PRINCIPALE COLLECTE DE FOND
+        h2 Collecte pour lutter contre le COVID-19
+        .text Nous vous insitons tous à aider les enfants qui se trouvent dans des pays touchés par le COVID.
+        // donate info
+        .donate-info.clearfix
+          .amount.raised
+            | Recoltés
+            span.theme_color 560.350 FCFA
+          .amount.goal
+            | sur un objectif de 
+            span.theme_color 750.000 FCFA
+        .donate-bar.wow.fadeIn(data-wow-delay='0ms' data-wow-duration='0ms')
+          .bar-inner
+            .bar(style='width:73%;')
+              .count-box
+                span.count-text(data-speed='2000' data-stop='73') 0
+                | %
+        a.theme-btn.btn-style-three(href='donate.html') Faire un don

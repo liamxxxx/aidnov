@@ -1,0 +1,18 @@
+.signup-form
+  form#forgot_form
+    h2 Mot de passe oublié ?
+    p.medium.text-center.
+      Pour réinitialiser votre mot de passe, saisissez l'adresse e-mail que vous utilisez pour vous connecter a la plateforme AidNov™. Un nouveau mot de passe vous sera envoyé par courriel.
+    .contact-form
+      .form-group
+        .input-group
+          span.input-group-addon
+            i.fa.fa-paper-plane
+          input#email.form-control(type='email' placeholder='E-mail' required)
+    .form-group
+      button.btn.btn-primary.btn-block.btn-lg(type='submit') Réinitialiser le mot de passe
+    .medium.text-center
+      a(href='/') Annuler
+  .text-center
+    | Vous n'avez pas de compte ?
+    a(href='/register') S'inscrire

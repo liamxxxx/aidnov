@@ -7,96 +7,104 @@ const userShemas = mongoose.Schema({
   nom: {
     type: String,
     trim: true,
-    required: [true, 'Nom est obligatoire']
+    required: [true, 'nom is required !']
   },
   prenoms: {
     type: String,
     trim: true,
-    required: [true, 'Prenoms est obligatoire']
+    required: [true, 'prenoms is required !']
   },
   email: {
     type: String,
-    required: [true, 'Email est obligatoire'],
-    validate: [validator.isEmail, 'Entrez un email valide'],
+    required: [true, 'email is required'],
+    validate: [validator.isEmail, 'valid email is required !'],
     trim: true,
-    // lowercase: true,
+    lowercase: true,
     unique: true
   },
   password: {
     type: String,
-    required: [true, 'Mot de passe est obligatoire']
+    required: [true, 'password is required !'],
+    select: false
   },
-  passwordConfirm: {
+  password_confirmation: {
     type: String,
-    required: [true, 'Confirmation du mot de passe est obligatoire'],
+    required: [true, 'password confirmation is required !'],
     validate: {
       validator: function(el) {
         return el === this.password
-      }, message : 'Mots de passe non identiques'
+      }, message : 'password not same !'
       }
   },
-  isVerified: {
+  is_verified: {
     type: Boolean,
     default: false
   },
-  isActive: {
+  is_active: {
     type: Boolean,
     default: true
   },
-  passwordResetToken: String,
-  passwordResetExpires: Date,
-  emailConfirmToken: String,
-  emailConfirmExpires: Date,
-  passwordChangedAt: Date,
+  password_reset_token: String,
+  password_reset_expires: Date,
+  email_confirmation_token: String,
+  email_confirmation_expires: Date,
+  password_changed_at: Date,
   role: {
     type: String,
     default: 'User',
-    // required: [true, 'Role est obligatoire'],
     enum: ['User', 'Admin']
   }
 });
 
+
+// Hash du mot de passe avant qu'elle soit sauvegardé
 userShemas.pre('save', async function (next) {
+  // Verifie si le password n'est pas modifier
   if (!this.isModified('password')) return next();
+  // Si le password est modifier alors on le hash
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-  this.passwordConfirm = undefined;
+  this.password_confirm = undefined;
   next();
 });
 
+// Methode de creation de token de reinitialisation de password
 userShemas.methods.createPasswordResetToken = function() {
-  const resetToken = crypto.randomBytes(32).toString('hex');
 
-  this.passwordResetToken = crypto
+  // 1- On genere un token de maniere aléatoire
+  const reset_token = crypto.randomBytes(32).toString('hex');
+
+  //2- Ensuite on crée un hash à partir du token généré
+  this.password_reset_token = crypto
     .createHash('sha256')
-    .update(resetToken)
+    .update(reset_token)
     .digest('hex');
+  
+  // 3- On defini le temps d'expiration du reset token
+  this.password_reset_expires = Date.now() + 10 * 60 * 1000;
 
-  console.log({ resetToken }, this.passwordResetToken);
-
-  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
-
-  return resetToken;
+  // 4- On retourne le token
+  return reset_token;
 };
 
+// Methode de creation de token de confirmation de mail
 userShemas.methods.createEmailConfirmToken = function() {
-  const emailToken = crypto.randomBytes(32).toString('hex');
-  this.emailConfirmToken = crypto
+  const email_token = crypto.randomBytes(32).toString('hex');
+  this.email_confirmation_token = crypto
     .createHash('sha256')
-    .update(emailToken)
+    .update(email_token)
     .digest('hex');
 
-  console.log({ emailToken }, this.emailConfirmToken);
+  this.email_confirmation_expires = Date.now() + 10 * 60 * 1000;
 
-  this.emailConfirmExpires = Date.now() + 10 * 60 * 1000;
-
-  return emailToken;
+  return email_token;
 };
 
+//TODO Methode qui verifie si n'as pas été changer avant le login
 userShemas.methods.changedPasswordAfter = function(JWTTimestamp) {
-  if (this.passwordChangedAt) {
+  if (this.password_changed_at) {
     const changedTimestamp = parseInt(
-      this.passwordChangedAt.getTime() / 1000,
+      this.password_changed_at.getTime() / 1000,
       10
     );
 
@@ -106,7 +114,6 @@ userShemas.methods.changedPasswordAfter = function(JWTTimestamp) {
   // False means NOT changed
   return false;
 };
-
 
 const User = mongoose.model('User', userShemas);
 

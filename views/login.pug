@@ -1,0 +1,41 @@
+include inclusion/_head
+include inclusion/_script
+include inclusion/_loginstyle 
+
+.page-wrapper
+  .preloader
+  include inclusion/_customhead
+
+.signup-form
+  form#form__login
+    h2 Se connecter
+    .contact-form
+      .form-group
+        .input-group
+          span.input-group-addon
+            i#lock2.fa.fa-paper-plane
+          input#email.form-control(type='email' placeholder='E-mail')
+      .form-group
+        .input-group
+          span.input-group-addon#pass
+            i#lock.fa.fa-lock
+          input#password.form-control(type='password' placeholder='Mot de passe')
+    p.medium.text-center
+      | En cliquant sur 
+      strong "Se connecter"
+      |  vous acceptez les 
+      a(href='/') Conditions générales d’utilisation
+      |  et accusez réception de la 
+      a(href='/') Politique de confidentialité
+      |  à AidNov™ – A product of LoHiDi
+      span ®
+      |  Group.
+      .form-group
+        button.btn.btn-block.btn-lg.btn-style-four#btn-un(type='submit') Se connecter
+  .text-center
+    a(href='/forgot_password') Mot de passe oublié ?
+  br
+  .text-center
+    | Vous n'avez pas de compte ? 
+    a(href='/register') S'inscrire
+    | .

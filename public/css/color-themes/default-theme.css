@@ -1,0 +1,191 @@
+/*Theme Color File*/
+
+a,
+.theme_color,
+.header-type-one .main-menu .navigation > li.current > a,
+.header-type-one .main-menu .navigation > li:hover > a,
+.main-header .donate-btn .donate,
+.main-header .cart-box:hover,
+.services-section .services-title h2 span,
+.services-style-one .inner-box .icon-box,
+.services-style-one .inner-box h3 a:hover,
+.causes-block .inner-box .lower-box h3 a:hover,
+.btn-style-one:hover,
+.accordion-box .block .acc-btn.active .icon-outer,
+.gallery-block .inner-box .image .overlay-box .overlay-inner .overlay-content h3 a:hover,
+.gallery-block .inner-box .image .overlay-box .overlay-inner .overlay-content .arow-box,
+.btn-style-six,
+.event-block .inner-box .content-column .content-inner h3 a:hover,
+.event-block .inner-box .content-column .content-inner .detail,
+.event-block .inner-box .content-column .date-column .date,
+.news-block .inner-box .lower-box h3 a:hover,
+.main-footer .links-widget .list li a:hover,
+.main-footer .links-widget .list li a:hover::before,
+.list-style-one li .icon,
+.main-footer .footer-nav li a:hover,
+.main-header .header-top .top-left ul li.call-us a,
+.social-icon-three a:hover,
+.main-header .info-box .icon-box,
+.page-title .bread-crumb li a:hover,
+.page-title .bread-crumb li a.current,
+.list-style-two li:before,
+.video-box .overlay-box span,
+.services-style-two .inner-box h2 a:hover,
+.team-member .inner-box .lower-box .designation,
+.blog-cat li a:hover,
+.event-block-two .inner-box .lower-box h3 a:hover,
+.event-block-two .inner-box .lower-box .detail,
+.styled-pagination li a:hover,
+.styled-pagination li a.active,
+.related-events .owl-nav .owl-prev:hover,
+.related-events .owl-nav .owl-next:hover,
+.causes-block-two .inner-box h3 a:hover,
+.related-causes .owl-nav .owl-prev:hover,
+.related-causes .owl-nav .owl-next:hover,
+.shop-item .inner-box .lower-content .rating .fa,
+.shop-item .inner-box .lower-content h3 a:hover,
+.sidebar .related-posts .shop-post a,
+.sidebar .related-posts .shop-post a:hover,
+.sidebar .related-posts .shop-post .rating .fa{
+	color:#bf4248;
+}
+
+/*Background Color*/
+
+.header-type-one .header-top,
+.main-header .donate-btn .donate:hover,
+.main-menu .navigation > li > ul > li:hover > a,
+.main-menu .navigation > li > ul > li  > ul > li > a:hover,
+.scroll-to-top:hover,
+.btn-style-one,
+.main-header .sticky-header .main-menu .navigation > li:hover > a,
+.main-header .sticky-header .main-menu .navigation > li.current > a,
+.main-header .sticky-header .main-menu .navigation > li.current-menu-item > a,
+.btn-style-three:hover,
+.fullwidth-section .section-outer .content-column .bar-inner .bar,
+.btn-style-four:hover,
+.causes-block .inner-box .lower-box .bar-inner .bar,
+.fact-counter .count-outer:before,
+.btn-style-five:hover,
+.gallery-block .inner-box .image .overlay-box .overlay-inner .overlay-content .arow-box:hover,
+.testimonial-section,
+.testimonial-section .owl-nav .owl-prev, .testimonial-section .owl-nav .owl-next,
+.btn-style-six:hover,
+.subscribe-style-one .form-group input[type="submit"],
+.subscribe-style-one .form-group button,
+.social-icon-two li a:hover,
+.btn-style-two:hover,
+.main-header .nav-outer,
+.testimonial-section-two,
+.social-icon-four li a:hover,
+.event-block-two .inner-box .image-column .image .event-date,
+.sidebar .popular-tags a:hover,
+.event-single .inner-box .image .event-date,
+.causes-block-two .inner-box .bar-inner .bar,
+.btn-style-seven:hover,
+.causes-single .upper-box .rate-column .bar-inner .bar,
+.causes-single .lower-box .text blockquote,
+.post-share-options .tags a:hover,
+.ui-state-active, .ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active,
+.ui-button.ui-state-active:hover,
+.donation-form-outer .radio-select input[type="radio"]:checked+label,
+.styled-pagination li a.next:hover{
+	background-color:#bf4248;
+}
+
+/*Border Color*/
+
+.main-header .donate-btn .donate,
+.main-header .donate-btn .donate:hover,
+.main-header .header-top .language .dropdown-menu,
+.main-header .search-box-outer .dropdown-menu,
+.main-header .search-panel input:focus,
+.main-header .search-panel select:focus,
+.main-menu .navigation > li > ul,
+.main-menu .navigation > li > ul > li > ul,
+.btn-style-one,
+.btn-style-three:hover,
+.fullwidth-section .section-outer .content-column .bar-inner .count-box,
+.btn-style-four,
+.btn-style-four:hover,
+.causes-block .inner-box .lower-box .bar-inner .count-box,
+.accordion-box .block .acc-btn.active .icon-outer,
+.btn-style-five:hover,
+.gallery-block .inner-box .image .overlay-box .overlay-inner .overlay-content .arow-box:hover,
+.gallery-block .inner-box .image .overlay-box .overlay-inner .overlay-content .arow-box,
+.btn-style-six,
+.btn-style-six:hover,
+.social-icon-two li a:hover,
+.btn-style-two,
+.btn-style-two:hover,
+.social-icon-four li a:hover,
+.sidebar .search-box .form-group input:focus,
+.sidebar .popular-tags a:hover,
+.styled-pagination li a:hover,
+.styled-pagination li a.active,
+.related-events .owl-nav .owl-prev:hover,
+.related-events .owl-nav .owl-next:hover,
+.causes-block-two .inner-box .bar-inner .count-box,
+.btn-style-seven:hover,
+.causes-single .upper-box .rate-column .bar-inner .count-box,
+.related-causes .owl-nav .owl-prev:hover,
+.related-causes .owl-nav .owl-next:hover,
+.comment-form .form-group input[type="text"]:focus,
+.comment-form .form-group input[type="password"]:focus,
+.comment-form .form-group input[type="tel"]:focus,
+.comment-form .form-group input[type="email"]:focus,
+.comment-form .form-group select:focus,
+.comment-form .form-group textarea:focus,
+.contact-form .form-group input[type="text"]:focus,
+.contact-form .form-group input[type="password"]:focus,
+.contact-form .form-group input[type="tel"]:focus,
+.contact-form .form-group input[type="email"]:focus,
+.contact-form .form-group select:focus,
+.contact-form .form-group textarea:focus,
+.ui-state-active, .ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active,
+.ui-button.ui-state-active:hover{
+	border-color:#bf4248;
+}
+
+/*Important Colors*/
+
+.main-slider .tparrows.preview3.tp-rightarrow:hover,
+.main-slider .tparrows.preview3.tp-leftarrow:hover,
+.rangeslider-widget .noUi-connect{
+	background-color:#ffb607 !important;
+}
+
+.main-slider .tparrows.preview3.tp-rightarrow:hover,
+.main-slider .tparrows.preview3.tp-leftarrow:hover{
+	border-color:#ffb607 !important;
+}
+
+.main-slider .btn-style-one:hover{
+	color:#ffb607 !important;
+}
+
+/*Responsive Color*/
+
+@media only screen and (max-width: 767px){
+	
+	.main-menu .navbar-header .navbar-toggle,
+	.main-menu .navbar-collapse > .navigation,
+	.main-menu .navbar-collapse > .navigation > li > ul,
+	.main-menu .navbar-collapse > .navigation > li > ul > li > ul,
+	.main-menu .navbar-collapse > .navigation > li > a,
+	.main-menu .navbar-collapse > .navigation > li > ul > li > a,
+	.main-menu .navbar-collapse > .navigation > li > ul > li > ul > li > a,
+	.main-menu .navbar-collapse > .navigation > li > a:hover,
+	.main-menu .navbar-collapse > .navigation > li > a:active,
+	.main-menu .navbar-collapse > .navigation > li > a:focus,
+	.main-menu .navbar-collapse > .navigation > li:hover > a,
+	.main-menu .navbar-collapse > .navigation > li > ul > li:hover > a,
+	.main-menu .navbar-collapse > .navigation > li > ul > li > ul > li:hover > a,
+	.main-menu .navbar-collapse > .navigation > li.current > a,
+	.main-menu .navbar-collapse > .navigation > li.current-menu-item > a{
+		background-color:#ffb607;
+	}
+
+}

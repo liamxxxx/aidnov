@@ -1,0 +1,54 @@
+extends base
+
+block content
+  section.map-section
+    .map-outer
+      // Map Canvas
+      iframe(src='https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15889.658946048921!2d-4.0069406!3d5.3535074!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x83399cc20acb7029!2sLoHiDi%20Group!5e0!3m2!1sfr!2sci!4v1587650887439!5m2!1sfr!2sci' width='1920' height='450' frameborder='0' style='border:0;' allowfullscreen aria-hidden='false' tabindex='0') 
+  
+  section.contact-section
+    .auto-container
+      .row.clearfix
+        // Form Column
+        .form-column.col-md-7.col-sm-12.col-xs-12
+          h2 Envoyer un message
+          .text Si vous avez des questions, n'hésitez pas à communiquer avec un membre de notre équipe des services à la clientèle. .
+          // Contact Form
+          .contact-form
+            form
+              .row.clearfix
+                .form-group.col-md-6.col-sm-6.col-xs-12
+                  input(type='text' name='username' placeholder='Votre nom et prénoms')
+                .form-group.col-md-6.col-sm-6.col-xs-12
+                  input(type='email' name='email' placeholder='Votre e-mail')
+                .form-group.col-md-12.col-sm-12.col-xs-12
+                  textarea(name='message' placeholder='Saisissez votre message')
+                .form-group.col-md-12.col-sm-12.col-xs-12
+                  button.theme-btn.btn-style-four(type='submit') Envoyer votre message
+          // End Contact Form
+        // Info Container
+        .info-column.col-md-5.col-sm-12.col-xs-12
+          .inner-column
+            h2 Contact
+            ul.contact-info
+              li
+                .icon-box
+                  span @
+                h4 E-mail
+                a(href='mailto:aide@aidnov.com' target='_blank') aide@aidnov.com
+              li
+                .icon-box
+                  span.flaticon-technology-1
+                h4 Phone
+                a(href='tel:+22507088586') (+225) 0708 8586
+              li
+                .icon-box
+                  span.flaticon-fax
+                h4 FAX
+                a(href='fax:+22507088586') (+225) 0708 8586
+              li
+                .icon-box
+                  span.flaticon-placeholder-1
+                h4 Address
+                | B52, Rue du Lycée Technique Cocody, Abidjan
+                br

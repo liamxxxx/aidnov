@@ -1,0 +1,42 @@
+header.main-header.header-type-one
+    .header-top
+      .auto-container
+        .clearfix
+          .top-left
+            ul.clearfix
+              li
+                span.icon.fa.fa-phone
+                |  
+                a(href='tel:+22507088586' style='color:#fff') (+225) 0708 8586
+              li
+                span.icon.fa.fa-envelope
+                |  
+                a(href='mailto:aide@aidnov.com' target='_blank' style='color:#fff') aide@aidnov.com
+              li
+                span.icon.fa.fa-clock-o
+                |  Lun-Sam: 8:00-17:00
+              li.language.dropdown
+                a.btn.btn-default.dropdown-toggle#dropdownMenu1(data-toggle='dropdown' aria-haspopup='true' aria-expanded='true' href='/')
+                  | FR 
+                  span.icon.fa.fa-caret-down
+                ul.dropdown-menu.style-one(aria-labelledby='dropdownMenu1')
+                  li
+                    a(href='/') English
+                  li
+                    a(href='/') Español
+                  li
+                    a(href='/') عربى
+
+
+    .header-upper
+      .auto-container
+        .clearfix
+          .pull-left.logo-outer
+            .logo
+              a(href='/')
+                img(src='/images/logo.png' alt)
+          .nav-outer.clearfix
+            //  Main Menu 
+            nav.main-menu
+              .navbar-header
+                //  Toggle Button 

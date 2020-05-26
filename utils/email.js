@@ -1,20 +1,20 @@
-const nodemailer = require('nodemailer');
-const pug = require('pug'); 
-const htmlToText = require('html-to-text');
+const nodemailer = require("nodemailer");
+const pug = require("pug");
+const htmlToText = require("html-to-text");
 
 // new Email(user, url).sendWelcome();
 // SendWelcome envoie un message au user
 
 class Email {
-  // Definition du contruction pour les variables qui devront 
+  // Definition du contruction pour les variables qui devront
   // s'initialiser lors de la creation de l'objet Email
   constructor(user, url) {
     this.to = user.email;
     this.nom = user.nom;
     this.url = url;
-    this.from = `AIDNOV <${process.env.EMAIL_FROM}>`;
+    this.from = `${process.env.EMAIL_FROM}`;
   }
-  
+
   // Create method for differents transport
   newTransport() {
     /**
@@ -22,15 +22,15 @@ class Email {
      * En production on utilise sendGrid
      * Tant dis que en developement on utilise le localhost
      */
-    if (process.env.NODE_ENV === 'production') {
-      // Sendgrid
+    if (process.env.NODE_ENV === "development") {
+      // MAILGUN
       return nodemailer.createTransport({
-        // host: process.env.SENDGRID_HOST,
-        // port: process.env.SENDGRID_PORT,
+        host: process.env.MAILGUN.HOST,
+        port: process.env.MAILGUN_PORT,
         service: 'SendGrid',
         auth: {
-          user: process.env.SENDGRID_USERNAME,
-          pass: process.env.SENDGRID_PASSWORD
+          user: process.env.MAILGUN_USERNAME,
+          pass: process.env.MAILGUN_PASSWORD
         }
       });
     }
@@ -41,8 +41,8 @@ class Email {
       port: process.env.EMAIL_PORT,
       auth: {
         user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD
-      }
+        pass: process.env.EMAIL_PASSWORD,
+      },
     });
   }
 
@@ -52,26 +52,29 @@ class Email {
     /**
      * 1 - On crée le fichier html a envoyer, en lui passant les variables à utiliser
      *  dans le template
-     * 
+     *
      * 2- On defini les options pour l'envoie de mail
-     * 
+     *
      * 3 - A l'aide de la methode de transport ci-dessus on envoie l'email.
-     * 
+     *
      */
 
     // 1- Generation du template html
-    const html = pug.renderFile(`${__dirname}/../views/emails/${template}.pug`, {
-      nom : this.nom,
-      url : this.url,
-      subject
-    });
+    const html = pug.renderFile(
+      `${__dirname}/../views/emails/${template}.pug`,
+      {
+        nom: this.nom,
+        url: this.url,
+        subject,
+      }
+    );
 
     // 2- Parametrage des options pour l'envoie de mail
     const mailOptions = {
       from: this.from,
       to: this.to,
       subject,
-      html
+      html,
       // text: htmlToText.fromString(html)
     };
 
@@ -80,11 +83,11 @@ class Email {
   }
 
   async sendWelcome() {
-    await this.send('Welcome Page', 'welcome');
+    await this.send("Welcome Page", "welcome");
   }
 
   async resetPassword() {
-    await this.send('Send reset password link', 'passwordReset');
+    await this.send("Send reset password link", "passwordReset");
   }
 }
 

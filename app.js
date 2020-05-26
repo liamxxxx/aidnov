@@ -7,16 +7,24 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const globalErrorHandler = require('./controllers/errorController');
+const cors = require('cors');
 
 
 const app = express();
+
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 // Serving static files
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
+// Serving static files
 
 // 1) GLOBAL MIDDLEWARES
 // Set security HTTP headers
@@ -61,7 +69,13 @@ app.use('/api/v1/comments', comment);
 app.use('/api/v1/donation', donateur);
 app.use('/api/v1/users', users);
 
+app.all('*', (req, res) => {
+  res.redirect('/')
+});
+
 app.use(globalErrorHandler);
- 
+
+
+
 module.exports = app;
 

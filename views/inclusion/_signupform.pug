@@ -1,0 +1,49 @@
+.signup-form
+  form#form__register
+    h2 S'inscrire
+    .contact-form
+      .form-group
+        .input-group
+          span.input-group-addon
+            i.fa.fa-user
+          input#nom.form-control(type='text' placeholder='Nom' name='nom' required)
+      .form-group
+        .input-group
+          span.input-group-addon
+            i.fa.fa-user
+          input#prenoms.form-control(type='text' placeholder='Prénoms' name='prenoms' required)
+      .form-group
+        .input-group
+          span.input-group-addon
+            i#lock.fa.fa-paper-plane
+          input#email.form-control(type='email' placeholder='E-mail' name='email' required)
+      .form-group
+        .input-group
+          span.input-group-addon
+            i#lock2.fa.fa-lock
+          input#password.form-control(type='password' placeholder='Mot de passe' name='password' required)
+      .form-group
+        .input-group
+          span.input-group-addon
+            i.fa.fa-lock#lock3
+            i.fa.fa-check
+          input#password_confirmation.form-control(type='password' name='password_confirmation' placeholder='Saisir à nouveau votre mot de passe' required)
+    p.medium.text-center
+      | En cliquant sur 
+      strong "S'inscrire"
+      |  vous acceptez les 
+      a(href='conditions_generales%20_dutilisation.html') Conditions générales d’utilisation
+      |  et accusez réception de la 
+      a(href='politique_de_confidentialite.html') Politique de confidentialité
+      |  à 
+      strong AidNov™
+      |  – A product of LoHiDi
+      span ®
+      |  Group.
+    .form-group
+      button.btn.btn-block.btn-lg#btn-un(type='submit') S'inscrire
+  .text-center
+    | Vous avez un compte ? 
+    a(href='/login') Se connecter
+    | .
+    

@@ -1,0 +1,97 @@
+section.donate-section
+  .auto-container
+    // Donate Block
+    .donate-block
+      .row.clearfix
+        // Image Column
+        .image-column.col-md-6.col-sm-12.col-xs-12.
+          
+          
+        // Content Column
+    .donate-form-section
+      .donation-form-outer
+        form#campagne-form(method='post' enctype="multipart/form-data" action='/create_campagne')
+          // Form Portlet
+          .contact-form
+            h3 Indiquez votre objectif ici ?
+            .row.clearfix
+              .form-group.col-lg-8.col-md-12.col-xs-12.clearfix.
+              .form-group.col-lg-8.col-md-8.col-xs-12.padd-top-20
+                input#prix.other-amount(type='number' name='montantDemande' placeholder='Votre objectif en FCFA')
+          br
+          .contact-form
+            h3 Indiquez les détails de votre campagne
+            .row.clearfix
+              .form-group.col-lg-4.col-md-4.col-xs-12
+                .field-label
+                  | Votre cause
+                  span.required *
+                select#cause(name='typeCampagne')
+                  option(value='Selectionnez la cause')
+                  option Santé
+                  option Commémoration
+                  option Urgences
+                  option Religion
+                  option Éducation
+                  option Mariage
+                  option Famille
+              .form-group.col-lg-4.col-md-6.col-xs-12
+                .field-label
+                  | Titre de votre campagne
+                  span.required *
+                input#nomCampagne(type='text' name='nomCampagne' placeholder='Donner un titre à votre campagne' required)
+            .row.clearfix
+              .form-group.col-lg-4.col-md-6.col-xs-12
+                .field-label
+                  | Votre Nom
+                  span.required *
+                input(type='text' name='nom' placeholder='Entrer votre nom ' value=`${user.nom}` required)
+              .form-group.col-lg-4.col-md-6.col-xs-12
+                .field-label
+                  | Votre Prénom
+                  span.required *
+                input(type='text' name='prenoms' placeholder='Entrer votre Prénoms' value=`${user.prenoms}`  required)
+              .form-group.col-lg-4.col-md-6.col-xs-12
+                .field-label
+                  | Votre Numero de Téléphone
+                  span.required *
+                input.tel#phone(type='tel' name='numero_telephone' placeholder='Entrer votre numero de telephone' required)
+                .country
+            .row.clearfix
+              .form-group.col-lg-4.col-md-6.col-xs-12
+                .field-label
+                  | Votre Pays
+                  span.required *
+                select.countries#countryId(name='pays')
+                  option(value='Selectionnner votre pays').
+                    Selectionnnez votre pays
+                    
+              .form-group.col-lg-4.col-md-6.col-xs-12
+                .field-label
+                  | Votre région
+                  span.required *
+                select.states#stateId(name='region')
+                  option(value) Selectionnez votre Région
+              .form-group.col-lg-4.col-md-6.col-xs-12
+                .field-label
+                  | Votre Ville
+                  span.required *
+                select.cities#cityId(name='ville')
+                  option(value) Selectionnez votre Ville
+          .panel.panel-default
+            .file-tab.panel-body
+                //  The file is stored here. 
+                input#photo(type='file' name='photo')
+          .contact-form
+            .row.clearfix
+              .form-group.col-md-12.col-sm-12.col-xs-12
+                textarea#raison(placeholder='Expliquer votre histoire en integralité' name='raison')
+          .contact-form(style='margin-bottom: 20px;')
+            h5
+              | AidNov™ prélève une commission de 5 % sur chaque don reçu. Le processeur de paiements collecte une commission de 3,5 % par don effectué par Mobile Money et de 2.9 % par don effectué par Carte de crédit. En poursuivant, vous acceptez les conditions générales d’utilisation et accusez réception de la politique de confidentialité à AidNov™ – A product of LoHiDi
+              span ® ®
+              |  Group.
+          .text-left
+            button.theme-btn.btn-style-one1(type='submit').
+              Soumettre votre campagne
+          

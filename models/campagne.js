@@ -4,7 +4,23 @@ const campagneShemas = new mongoose.Schema({
   user: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
-    required: [true, 'Utilisateur est obligatoire']
+    // required: [true, 'Utilisateur est obligatoire']
+  },
+  pays: {
+    type: String,
+    required: [true, 'Pays est obligatoire']
+  },
+  region: {
+    type: String,
+    required: [true, 'Region est obligatoire']
+  },
+  ville: {
+    type: String,
+    required: [true, 'Ville est obligatoire']
+  },
+  numero_telephone: {
+    type: String,
+    required: [true, 'Numero de telephone est obligatoire']
   },
   nomCampagne: {
     type: String,
@@ -12,8 +28,7 @@ const campagneShemas = new mongoose.Schema({
   },
   typeCampagne: {
     type: String,
-    required: [true, 'Type de campagne est obligatoire'],
-    enum: ['Santé', 'Social'],
+    required: [true, 'Type de campagne est obligatoire']
   },
   montantDemande: {
     type: Number,
